@@ -13,14 +13,15 @@ class Echo
       h[k.sub(/^HTTP_/, '')] = env[k] if k.start_with? 'HTTP_'
       h
     }
-
     body = env['rack.input'].read
 
     $logger.info "Headers: #{headers}"
     $logger.info "Body: #{body}"
 
-    [200, header(headers), body({ msg: 'echo' })]
+    [200, header(headers), response({ msg: 'echo' })]
   end
+
+private
 
   def header(headers)
     {
@@ -31,11 +32,9 @@ class Echo
     }
   end
 
-  def body(data)
+  def response(data)
     [data.to_json]
   end
 end
 
 run Echo.new
-
-require 'debugger'
